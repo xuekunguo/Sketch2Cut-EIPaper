@@ -1,0 +1,81 @@
+
+
+\documentclass[9pt, a4paper]{extarticle}
+
+\usepackage[left=1.91cm,right=1.91cm,top=2.54cm,bottom=2.54cm]{geometry}
+\usepackage{mathrsfs}
+\usepackage[ruled,lined,linesnumbered]{algorithm2e}
+%\usepackage{graphicx}
+%\usepackage{subfigure}
+%\usepackage{soul}
+%\usepackage{color}
+\usepackage{CJK}
+%\usepackage[textwidth=4cm, shadow,
+%backgroundcolor=blue!20!white,
+%bordercolor=red]{todonotes}
+%\usepackage[colorlinks,linkcolor=black,
+%anchorcolor=black,citecolor=blue]{hyperref}
+
+%-------------------------- 自定义命令 --------------------------
+\newcommand{\TODO}[1]{\textcolor{red}{#1}}  % 字体显示为红色，表达将要做的（但还未做）的事
+\newcommand{\DONE}{\textcolor{red}{\bf DONE}} % 表示已完成
+\newcommand{\DONING}{\textcolor{blue}{\bf DONING}} % 表示完成了一部分
+
+\setlength{\parskip}{3ex}   % 行间距
+\setlength{\parindent}{0pt}   % 首先缩进
+
+% \renewcommand{\theenumi}{\bf {\arabic{enumi})}}  % enumerate, itemize, description内部的标识
+
+\newcommand{\tinytodo}[2][]
+{\todo[caption={#2}, size=\small, #1]{\renewcommand{\baselinestretch}{0.5}\selectfont#2\par}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{CJK*}{GBK}{song}
+
+\title{针对浏览式草图造型的按需部件建议技术}
+\author{Xuekun Guo}
+\date{2016.04.25}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{摘要}
+针对浏览式草图造型的按需部件建议技术
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{引言}
+；
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{相关工作}
+；
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{方法概述}
+；
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{快速匹配数据结构}
+；
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{部件建议}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{三维代理部件创建}
+；
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{搜索描述符}
+；
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{模型匹配}
+；
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Reference %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{alpha}
+\bibliography{Bib}
+\end{CJK*}
+\end{document} 
