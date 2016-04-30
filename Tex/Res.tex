@@ -13,6 +13,25 @@
 注意结果模型都是由非常规部件或来自不同类的部件构成。}\label{FigCTModsProxy}
 \end{figure}
 
+\textbf{时间统计} 大概需要平均针8秒为一个模型建立其超面片图表示。对200个模型的数据库，建立轮廓索引需要约2小时（CUDA与OpenMP\textsuperscript{\textregistered}加速）。
+用户平均画3笔建造一个代理部件，平均需要22秒。轮廓匹配平均需要0.078毫秒。给一个代理轮廓及模型在各视角下的轮廓，平均需要0.337秒找到其候选轮廓（包括轮廓匹配步骤）。
+需要0.15毫秒找到初始候选部件。部件优化平均需要0.84秒。$k$NN图辅助的轮廓匹配得到的性能提升如表\ref{TabTime}。
+%--------------------------
+\begin{table}\centering \renewcommand\arraystretch{1.3}
+\begin{tabular}{|c|c|c|c|}
+\hline \diagbox{Algorithms}{Database Size} & 114    & 205     & 513    \\
+\hline Brute-force                            & 59.58  & 106.99  & 240.07 \\
+\hline $k$NNG                             & 6.94   & 12.66   & 28.93  \\
+\hline CPU and GPU Acceleration            & 0.36   & 1.03    & 1.48  \\
+\hline
+\end{tabular}
+\caption{时间以秒计算。Brute-force版本处理数据库模型与模型轮廓一个接一个地。可以观察到采用加速结构后，我们的算法效率不断提高。
+$k$NNG表示我们的轮廓索引数据结构。}\label{TabTime}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{$k$NN图}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{对比}
 为了定性与定量地评估我们方法的效果，我们对比了如方法：
