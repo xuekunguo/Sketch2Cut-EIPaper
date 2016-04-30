@@ -1,0 +1,139 @@
+
+\section{候选部件排序}
+我们基于候选部件与三维代理部件及当前模型间的兼容性对候选部件排序。
+
+在计算兼容性的时候，我们考虑如下因素：1）候选部件与代理部件间的二维投影的相似性；2）候选部件与三维代理部件间三维相似性；
+3）候选部件与三维代理部件间的背景一致性。给一个候选部件$p$（$p$提取自数据库模型$M$），三维代理部件$B$，两者的兼容性定义如下：
+\[J\left( {p,B} \right) = \omega {T_p}\left( {p,B} \right) + \xi {T_g}\left( {p,B} \right) + \psi {T_c}\left( {\Sigma ,{\rm X}} \right),\]
+其中，$\Sigma$指$p$的背景区域，$\rm X$指$B$的背景区域，$\omega=0.8$，$\xi = 0.15$，$\psi = 0.05$。
+$T_p \left( \cdot, \cdot \right)$计算三维模型的二维投影的相似性。$T_g \left( \cdot, \cdot \right)$计算三维模型的三维相似性。$T_c \left(, \right)$计算三维模型间的一致性。
+
+\textbf{二维投影相似性} $T_p \left(p, B \right)$定义如下：
+\[{T_p}\left( {p,B} \right) = {\omega _m}\frac{1}{{\mathop {\min }\limits_i V\left( {{{\bf{A}}_m},{{\bf{A}}_i}} \right)}} + {\omega _a}\frac{1}{{\mathop {\min }\limits_i V\left( {{{\bf{A}}_a},{{\bf{A}}_i}} \right)}},\]
+其中，${\bf A}_m$与${\bf A}_a$是$p$的主轮廓与副轮廓的描述符，在最佳采样距离下。${\bf A}_i$是$B$在最佳采样距离下第$i$（$1 \le i \le T_M$）个视角下的轮廓的描述符。
+$V \left(, \right)$的定义见方程（2）。$\omega_m = 0.9$，$\omega_a = 0.1$。
+
+\textbf{三维模型相似性} $T_g \left(p, B \right)$定义如下：
+\[{T_g}\left( {p,B} \right) = \alpha D\left( {p,B} \right) + \beta D\left( {B,p} \right),\]
+其中，$D \left( \cdot, \cdot \right)$是largest common pointset measure~\cite{Aiger2008}。$\alpha = 0.9$，$\beta = 0.1$。
+
+\textbf{背景一致性} ${T_c}\left( {\Sigma ,{\rm X}} \right)$定义如下：
+\[{T_c}\left( {\Sigma ,{\rm X}} \right) = {T_g}\left( {{\rm X},\Sigma } \right).\]
+
+兼容性分数值低于$\theta_j$的候选部件被丢弃。留下的候选部件排序后建议给用户。如果需要多样性的部件建议，候选部件用Maximal Marginal Relevance criterion~\cite{Chaudhuri2010}技术重新排序。
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section{逐步式部件提取}\label{SecPartExtract}
+%用户选择了候选模型，我们必须实时地精确地找到并切割下匹配的候选部件。要实现该目标，我们需要解决如下技术难点：
+%\begin{itemize}
+%\item 一个轮廓段可能包括多个语义部件。语义部件指类似头部件，椅子背部件等部件。
+%\item 轮廓边界可能是非常规则的或并不与语义部件直接相关。因此，这样的部件仅能以用户草图为参考分割。
+%\item 分割速度要足够快，满足交互需求。
+%\end{itemize}
+%
+%前两种情况如图\ref{FigPartseg}所示。
+%%--------------------------
+%\begin{figure}\centering
+%\includegraphics[width=\linewidth]{./Mat/IrreWay.pdf}
+%\caption[非常规分割的例子]{非常规分割方式示意图。在每个子图内，左侧是数据库模型的分割结果，右下角给出结果模型。}\label{FigPartseg}
+%\end{figure}
+%
+%我们通过为数据库模型建立超面片图（Superface Graph，SFG）表示解决如上问题。超面片图是三维模型的离散细粒度表示形式。
+%图上顶点代表超面片。超面片通过对模型做基于边界特征的过分割得到。
+%图上边描述超面片间的相邻关系。
+%边的权重表示相连的超面片组成同一部件的概率（如图\ref{FigSFG}所示）。
+%%--------------------------
+%\begin{figure}\centering
+%\includegraphics[width=\linewidth]{./Mat/SFG.pdf}
+%\caption[三维模型超面片图建立过程示意图]{三维模型超面片图建立过程。给一个Teddy模型（a），我们将它分割成$50$个超面片（b）。一个超面片是超面片图的一个顶点。相邻超面片由带权重的边连接（c）。}\label{FigSFG}
+%\end{figure}
+%
+%超面片图包含了相邻超面片合并为更大超面片的先验概率。我们在离线阶段得到每个数据库模型的超面片图表示。
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{超面片图表示}\label{SubSecSFG}
+%为了给数据库模型建立超面片图表示，我们将模型表面分割成$50$小块~\cite{Huang2011}。一小块视为一个超面片（对应超面片图内一个顶点）。
+%每一对相邻超面片通过超面片图上一条边相连。
+%
+%为了计算边的权重，我们对三维模型做$900$次Randomized Segmentation~\cite{Golovinskiy2008}。分割的目标部件数目由$2$变化到$10$。
+%给一个分割结果，我们为每一个超面片建立一个直方图，描述该超面片属于各分割部件的概率。
+%直方图的一个直方条针对一个分割部件，其值是该超面片位于该分割部件内的面积比例（如图\ref{FigConsistency}）。
+%数学上讲，超面片$s$针对分割部件$g$的直方条$h_s^g$定义如下：
+%\[ h_s^g = \frac{{\sum\limits_{f ~\in~ Faces(g) \cap Faces(s)} {Area\left( {f} \right)} }}{{\sum\limits_{f ~\in~ Faces(s)} {Area\left( {f} \right)} }}, \]
+%其中，$Face \left( x \right)$是属于$x$的面片集合，$Aera \left( f \right)$指面片$f$的面积。
+%%--------------------------
+%\begin{figure}\centering
+%\includegraphics[width=\linewidth]{./Mat/Consistency.pdf}
+%\caption[超面片在分割部件上的分布示意图]{超面片在分割部件上的分布示意图。$s_0$，$s_1$和$s_2$是超面片。$g_0$，$g_1$与$g_2$是在模型上通过Randomized Segmentation得到的分割部件。}\label{FigConsistency}
+%\end{figure}
+%
+%这些直方图做为计算超面片位于同一部件内概率的特征向量。
+%我们定义$P\left(s, s' \right)$为相邻超面片$s$与$s'$位于同一部件上的概率（称为超面片间一致性）。
+%$P \left(s, s' \right)$为两超面片对应的直方图$H$与$H'$的${\chi ^2}$距离：
+%\[ {P}\left( {s,s'} \right) = 1 - {\chi ^2}\left( {H,H'} \right) = 1 - \frac{1}{2}\sum\limits_{{g_i} \in G} {\frac{{{{\left( {h_s^{{g_i}} - h_{s'}^{{g_i}}} \right)}^2}}}{{{{\left( {h_s^{{g_i}} + h_{s'}^{{g_i}}} \right)}^2}}}}, \]
+%其中，$G = \left\{ {{g_i}\left| {1 \le i \le N} \right.} \right\}$是一次Randomized Segmentation得到的部件的集合，$g_i$是第$i$个分割部件，$N$是分割部件个数。
+%
+%为了得到超面片图上边的权重，我们首先将两超面片在不同Randomized Segmentation结果上的一致性累加，然后通过分割次数归一化。
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{模糊部件识别}
+%第一步，我们在模型的超面片图上提取一个与轮廓段大致匹配的三维部件。
+%我们将轮廓段两端点相连得到封闭轮廓段。这形成了用户期望部件的二维投影边界。
+%然后，我们从与投影区域中间最近的超面片图开始，采用泛洪算法，将所有处于该投影区域内的超面片收集起来。
+%
+%在这个步骤中，我们必须处理如下问题：（1）轮廓段可能深度不连续，跨越几个不相连的部件（\ref{FigComplexCtour}（a））。
+%（2）匹配上的轮廓段可能不包围任何部件（图\ref{FigComplexCtour}（b）内蓝色与绿色轮廓段包围的部分）。
+%（3）查询轮廓可能与同一三维部件在不同视角下的轮廓段匹配上（如图\ref{FigComplexCtour}（c））。
+%为了解决该问题，我们过滤掉无效部件并去掉重复部件。
+%%--------------------------
+%\begin{figure}\centering
+%\includegraphics[width=\linewidth]{./Mat/ComplexCtour.pdf}
+%\caption[复杂轮廓及其关系示意图]{复杂轮廓及其关系示意图。（a）示意深度不连续轮廓段。（b）示意空轮廓段。（c）示意匹配至同一三维部件在不同视角下的轮廓段。}\label{FigComplexCtour}
+%\end{figure}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{由粗到细地边界优化}
+%粗糙部件被识别出来后，我们就把它从模型上分割下来并优化其边界使与代理模型更加匹配。在该过程中，我们考虑如下因素：
+%\begin{itemize}
+%\item {\bf 轮廓闭包} 正如前面所指出的，连接轮廓段两端点的直线与轮廓段构成目标三维部件的自然边界。因此，目标三维部件的投影应该与该边界尽量一致。
+%\item {\bf 超面片同现} 如果两个超面片总是出现在随机分割得到的同一部件上，那么它们倾向于同时属于或同时不属于目标三维部件。这一点是超面片的先验概率。
+%\item {\bf 凹陷} 模型凹陷信息对于得到高质量的分割结果至关重要，因为凹折痕通常被人类视为自然的分割边界\cite{AU2012TVCG}。
+%\item {\bf 光滑} 分割部件的边界最好不要是剧烈的锯齿形。
+%\end{itemize}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{粗层次部件提取}
+%我们将粗层次部件提取问题形式化为二值标记问题，该问题可通过最小化Gibbs能量求解：
+%\[E_{c} = \sum\limits_{{i} \in V} {{E_{1}}\left( {{l_{i}}} \right)}  + \sum\limits_{\left( {i,j} \right) \in E} {{E_{2}}\left( {{l_{i}},{l_{j}}} \right)} ,\]
+%其中，$V$与$E$分别代表超面片图$\mathcal{G}$的顶点集合与边集合。$E_1\left( l_i \right)$是将顶点$i$标记为$l_i$时的能量耗费。
+%$E_2 \left(l_i, \l_j \right)$是当分别将顶点$i$与$j$标记$l_i$与$l_j$时的能量耗费。$E_l$定义如下：
+%\[{E_1}\left( {{l_i}} \right) = \left\{ {\begin{array}{*{20}{c}}
+%   { - \ln {\mathcal{P}}\left( i \right),} & {{l_i} = 1,}  \\
+%   { - \ln \left( {1 - {\mathcal{P}}\left( i \right)} \right),} & {{l_i} = 0,}  \\
+%\end{array}} \right.\]
+%其中，$\mathcal{P} \left( i \right)$是将标记$1$置给顶点$i$的概率。根据轮廓闭包约束，$\mathcal{P} \left( i \right)$定义为第$i$个超面片的投影位于该轮廓内的面积百分比：
+%\[{\mathcal{P}}\left( i \right) = \frac{{Area_{proj}^{in}\left( i \right)}}{{Are{a_{proj}}\left( i \right)}},\]
+%其中，$Area_{proj}^{in} \left( i \right)$是第$i$个超面片的投影与轮廓线闭包相交部分的面积。$Area_{proj} \left( i \right)$是第$i$个超面片的投影的面积。
+%$E_2$基于超面片同现约束定义为：
+%\[{E_2}\left( {{l_i},{l_j}} \right) = \left\{ {\begin{array}{*{20}{c}}
+%   {0,} & {{l_i} = {l_j},}  \\
+%   {{e_{ij}},} & {{l_i} \ne {l_j},}  \\
+%\end{array}} \right.\]
+%其中，$e_{ij}$是超面片图的边权重。该二值标记问题通过二值图割方法求解\cite{Boykov2004}。
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{细层次部件提取}
+%在超面片层次上得到目标三维部件（一组相邻的超面片）后，我们将边界超面片投影至原模型上与该超面片中心最近的顶点上。
+%对于超面片图上的边$e$，令$v_1$与$v_2$分别为$e$相连的两超面片在原模型上对应的投影顶点。
+%我们沿着直线$v_1 v_2$，将$v_1$传播至$v_2$。
+%
+%然后，我们通过迭代地最小化如下能量函数实现边界优化：
+%\[ E_{f}=E_{v}+E_{s}, \]
+%其中，$E_v$是凹陷能量项，$E_s$是光滑能量项。$E_v$定义为所有边界边的凹陷能量之和\cite{Katz2003}：
+%\[ E_{v}=\sum_{e\in \partial Q}\eta(1+\cos\alpha_{e})|e|, \]
+%其中，$e$是候选三维部件$Q$边界上的一条边，$\left| \cdot \right|$表示$e$的长度，$\alpha_{e}$是$e$的二面角。
+%$e$是凹陷边时，$\eta=0.1$；否则$\eta = 1.0$。$E_s$定义如下：
+%\[{E_s} = \sum\limits_{v \in \partial Q} {\left| {\sin\left\langle {{e_l},{e_r}} \right\rangle } \right|},\]
+%其中，$v$是边界$Q$上的顶点。$e_l$是$Q$上指向$v$的一条边，$e_r$是$Q$上起于$v$的一条边。
+%我们通过在边界顶点上施加snake operations~\cite{Ji2006}最小化能量函数$E_f$。
+%
+%用户点击鼠标即可执行部件边界优化。该步骤是可选的，它并不会对最终造型结果有太大影响。 

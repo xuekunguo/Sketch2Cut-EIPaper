@@ -1,0 +1,33 @@
+
+
+\section{候选部件优化}
+我们首先得到ROI区域$\Omega_{obj}$与$\Omega_{obj}'$在数据库模型上，通过扩展初始切割线，在初始候选部件的内部与外部，扩展长度为$0.1 l_{dia}$。
+$l_{dia}$是初始候选部件的包围盒的对角线长度。代理部件的ROI区域$\Omega_{proxy}$通过扩展其边界，类似数据库模型的方法得到。
+接着我们大致地将$\Omega_{obj}$与$\Omega_{proxy}$对齐。面片层级的部件提取问题形式化为能量最优化问题，目标函数定义如下：
+\[E\left( X \right) = \sum\limits_{{v_i} \in {\nu ^f}} {{E_d}\left( {{x_{{v_i}}}} \right) + \sum\limits_{\left( {{v_i},{v_j}} \right) \in {\varepsilon ^f}} {{E_s}\left( {{x_{{v_i}}},{x_{{v_j}}}} \right)} ,} \]
+其中，$G^f = \left( \nu^f, \varepsilon^f \right)$是ROI区域${\Omega _{obj}} \cup \Omega'_{obj}$的对偶图。$\varepsilon^f$表示面片，$\nu^f$表示面片间相邻关系。
+${\rm X} = \left\{ {{x_{{v_i}}}|{v_i} \in \nu } \right\}$（$x_{v_i} = \left\{ 0, 1 \right\}$）是$G^f$的一个标记。$E_d \left(x_{v_i} \right)$是数值项，计算将
+标记$x_{v_i}$给$v_i$的能量耗费，其定义如下：
+\[{E_d}\left( {{x_{{v_i}}}} \right) = \left\{ {\begin{array}{*{20}{c}}
+   { - \ln {D_{obj}}\left( {{v_i}} \right),} & {{x_{{v_i}}} = 1,}  \\
+   { - \ln \left( {1 - {D_{obj}}\left( {{v_i}} \right)} \right),} & {{x_{{v_i}}} = 0,}  \\
+\end{array}} \right.\]
+其中，$D_{obj} \left(v_i \right)$表示将标记1置给$v_i$的概率。定义如下：
+\[{D_{obj}}\left( {{v_i}} \right) = {\omega _c}{g_c}\left( {{v_i}} \right) + {\omega _s}{g_s}\left( {{v_i}} \right),\]
+其中，$\omega_c = 0.5 + 0.2d$，$d$表示$v_i$与初始切割线间距。$\omega_s = 1 - \omega_c$（$\omega_s \ge 0$）。
+$g_s \left( v_i \right)$是$v_i$与代理部件ROI$\Omega_{proxy}$间距，$g_c \left(v_i \right)$定义如下：
+\[{g_c}\left( {{v_i}} \right) = \left\{ {\begin{array}{*{20}{c}}
+   {\frac{{vol\left( {{\Omega _{obj}}} \right)}}{{vol\left( {{\Omega _{proxy}}} \right)}},} & {{v_i} \in {\Omega _{obj}},}  \\
+   {\frac{{vol\left( {\Omega {'_{obj}}} \right)}}{{vol\left( {{\Omega _{proxy}}} \right)}},} & {{v_i} \in \Omega {'_{obj}},}  \\
+\end{array}} \right.\]
+$V \left( \cdot \right)$计算OBB的体积。
+
+$E_s \left( x_{v_i}, x_{v_j} \right)$是光滑项，鼓励$v_i$与$v_j$间的空间一致性。其定义如下：
+\[{E_s}\left( {{x_{{v_i}}},{x_{{v_j}}}} \right) = \left\{ {\begin{array}{*{20}{c}}
+   {0,} & {{x_{{v_i}}} = {x_{{v_j}}},}  \\
+   {\exp \left( {\frac{{2\theta }}{\pi }} \right)} & {{x_{{v_i}}} \ne {x_{{v_j}}},}  \\
+\end{array}} \right.\]
+其中$\theta  \in \left[ {0,\frac{\pi }{2}} \right]$是相邻面片$v_i$与$v_j$的共边与初始切割线的拟合平面间的夹角。
+
+初始候选部件提示给用户，做为部件建议。如果用户选中该部件，系统会自动地对该部件细化。候选部件细化是可选项。
+
