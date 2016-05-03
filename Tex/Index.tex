@@ -4,41 +4,28 @@
 \section{快速匹配数据结构}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{超面片图表示}
-类似~\cite{GuoSGP2016}，我们将三维模型表示成粗粒度形式--超面片图。
-图上顶点代表超面片。超面片通过对模型做基于边界特征的过分割得到。
-图上边描述超面片间的相邻关系。
-边的权重表示相连的超面片组成同一部件的概率（如图\ref{FigSFG}所示）。
+
+我们在预处理阶段为数据库模型建立超面片图表示形式~\cite{GuoSGP2016}。图上顶点表示超面片。图上边描述超面片间空间相邻关系。边上权重表示相邻超面片合并成更大超面片的先验概率（如图~\ref{FigSFG}）。
 %--------------------------
 \begin{figure}\centering
 \includegraphics[width=\linewidth]{./Mat/SFG.pdf}
-\caption[三维模型超面片图建立过程示意图]{三维模型超面片图建立过程。给一个Teddy模型（a），我们将它分割成$50$个超面片（b）。
+\caption{三维模型超面片图建立过程示意。给一个Deer模型（a），我们将它分割成200个超面片（b）。
 一个超面片是超面片图的一个顶点。相邻超面片由带权重的边连接（c）。}\label{FigSFG}
 \end{figure}
 
-超面片图包含了相邻超面片合并为更大超面片的先验概率。我们在离线阶段得到每个数据库模型的超面片图表示。
+为了建立超面片图，我们首先将模型分割成200个片断~\cite{Huang2011}。一个片断视一个超面片。相邻超面片间用一条边相连。
 
-为了给数据库模型建立超面片图表示，我们将模型表面分割成$200$小块~\cite{Huang2011}。一小块视为一个超面片（对应超面片图内一个顶点）。
-每一对相邻超面片通过超面片图上一条边相连。
-
-为了计算边的权重，我们对三维模型做$900$次Randomized Segmentation~\cite{Golovinskiy2008}。分割的目标部件数目由$2$变化到$10$。
-给一个分割结果，我们为每一个超面片建立一个直方图，描述该超面片属于各分割部件的概率。
-直方图的一个直方条针对一个分割部件，其值是该超面片位于该分割部件内的面积比例（如图\ref{FigConsistency}）。
-数学上讲，超面片$s$针对分割部件$g$的直方条$h_s^g$定义如下：
-\[ h_s^g = \frac{{\sum\limits_{f ~\in~ Faces(g) \cap Faces(s)} {Area\left( {f} \right)} }}{{\sum\limits_{f ~\in~ Faces(s)} {Area\left( {f} \right)} }}, \]
-其中，$Face \left( x \right)$是属于$x$的面片集合，$Aera \left( f \right)$指面片$f$的面积。
+为了计算边权重，我们对三维模型做多次随机分割（Randomized Segmentation）~\cite{Golovinskiy2008}。
+对每一次分割结果，我们为每个超面片建立一个直方图，描述该超面片属于各分割部件的概率（如图\ref{FigSFDist}）。超面片$s$针对分割部件$g$的直方条$h_s^g$定义为：
+\[h_s^g = \frac{{\sum\limits_{f \in F\left( g \right) \cap F\left( s \right)} {A\left( f \right)} }}{{\sum\limits_{f \in F\left( s \right)} {A\left( f \right)} }},\]
+其中，$F \left(x \right)$是属于$x$的面片集合，$A \left( f \right)$是面片$f$的面积。相邻面片$s$与$s'$位于同一部件的概率$P \left(s, s' \right)$为两超面片的直方图$H$与$H'$的${\chi ^2}$的距离：
+\[P\left( {s,s'} \right) = 1 - {\chi ^2}\left( {H,H'} \right) = 1 - \frac{1}{2}\sum\limits_{{g_i} \in G} {\frac{{{{\left( {h_s^{{g_i}} - h_{s'}^{{g_i}}} \right)}^2}}}{{{{\left( {h_s^{{g_i}} + h_{s'}^{{g_i}}} \right)}^2}}}} ,\]
+其中$G = \left\{ {{g_i}|1 \le i \le N} \right\}$是一次分割得到的部件。为了得到超面片图上边的权重，我们首先将两超面片在不同分割结果上的概率累加，再通过分割次数归一化。
 %--------------------------
 \begin{figure}\centering
-\includegraphics[width=\linewidth]{./Mat/Consistency.pdf}
-\caption[超面片在分割部件上的分布示意图]{超面片在分割部件上的分布示意图。$s_0$，$s_1$和$s_2$是超面片。$g_0$，$g_1$与$g_2$是在模型上通过Randomized Segmentation得到的分割部件。}\label{FigConsistency}
+\includegraphics[width=\linewidth]{./Mat/SFDist.pdf}
+\caption{超面片在分割部件上的分布示意图。$s_0$，$s_1$和$s_2$是超面片。$g_0$，$g_1$与$g_2$是在模型上通过Randomized Segmentation得到的分割部件。}\label{FigSFDist}
 \end{figure}
-
-这些直方图做为计算超面片位于同一部件内概率的特征向量。
-我们定义$P\left(s, s' \right)$为相邻超面片$s$与$s'$位于同一部件上的概率（称为超面片间一致性）。
-$P \left(s, s' \right)$为两超面片对应的直方图$H$与$H'$的${\chi ^2}$距离：
-\[ {P}\left( {s,s'} \right) = 1 - {\chi ^2}\left( {H,H'} \right) = 1 - \frac{1}{2}\sum\limits_{{g_i} \in G} {\frac{{{{\left( {h_s^{{g_i}} - h_{s'}^{{g_i}}} \right)}^2}}}{{{{\left( {h_s^{{g_i}} + h_{s'}^{{g_i}}} \right)}^2}}}}, \]
-其中，$G = \left\{ {{g_i}\left| {1 \le i \le N} \right.} \right\}$是一次Randomized Segmentation得到的部件的集合，$g_i$是第$i$个分割部件，$N$是分割部件个数。
-
-为了得到超面片图上边的权重，我们首先将两超面片在不同Randomized Segmentation结果上的一致性累加，然后通过分割次数归一化。
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{轮廓层次索引}
@@ -46,18 +33,24 @@ $P \left(s, s' \right)$为两超面片对应的直方图$H$与$H'$的${\chi ^2}$距离：
 我们为数据库模型提取$T_M = 14$个视角下的轮廓（boundary contours）~\cite{DeCarlo2003}，包括6个规范视角，8个角落视角。
 通过这种方式，我们得到三维模型的二维轮廓${\Gamma _M} = \left\{ {{S_i}|1 \le i \le {T_M}} \right\}$，$S_i$表示第$i$个视角下的轮廓。
 
-\textbf{轮廓描述符} 查询轮廓（代理模型轮廓）整体做为一个轮廓段。模型轮廓在每个尺度下都由若干轮廓段构成（见\ref{SecRCKNNG}节）。
-模型轮廓的轮廓段与查询轮廓相匹配，从而得到查询轮廓与模型轮廓的局部匹配。为了比较两个轮廓段，我们为它们计算轮廓描述符。类似~\cite{GuoSGP2016}，我们采用Riemenschneider等人~\cite{Riemenschneider2010}提出的角度矩阵做为轮廓描述符。
-该描述符描述了轮廓段上采样点间的空间分布。我们为轮廓提取描述符，在不同的采样距离下$\Theta  = \left\{ {3,6,9,12,15} \right\}$提取轮廓描述符。
-一个轮廓段内有$m$个采样点。给一对采样点$\left(b_i, b_j \right)$，我们计算角度值$\alpha_{ij}$：
+\textbf{轮廓描述符} 我们采用角度矩阵做为轮廓描述符~\cite{GuoSGP2016,Riemenschneider2010}。
+该描述符描述了轮廓段上采样点间的空间分布。为了提取轮廓描述符，我们首先对轮廓等距离采样（采样距离为$\Theta  = \left\{ {3,6,9,12,15} \right\}$），得到$m$个采样点。对任意一对采样点$bi, bj$，我们计算其角度值$\alpha_{ij}$（如图~\ref{FigAngleDesc}）：
 \[{\alpha _{ij}} = \left\{ {\begin{array}{*{20}{c}}
 {\left\langle {\overline {{b_i}{b_j}} ,\overline {{b_i}{b_{i + \Delta }}} } \right\rangle } & {\text{if~} i < j,}  \\
 {\left\langle {\overline {{b_i}{b_j}} ,\overline {{b_i}{b_{i - \Delta }}} } \right\rangle } & {\text{if~} i > j,}  \\
 0 & {\text{if~} \left\| {i - j} \right\| \le \Delta }  \\
 \end{array}} \right.\]
-其中，$\delta=2$是偏移量，$\left\langle l_1, l_2 \right\rangle$代表直线$l_1$与$l_2$间的夹角。轮廓描述符即为该角度值构成的矩阵$A$（$A_{ij}=\alpha_{ij}$）。
-两个轮廓段$S$与$T$间的距离是两轮廓段的角度矩阵$A^S$与$A^T$的欧式距离：
-\[ D(S, T) = \frac{1}{m^2} \sum_{i = 1}^m \sum_{j = 1}^m \left( A^S_{ij} - A^T_{ij} \right)^2\]
+其中$\delta=2$是偏移量，$\left\langle l_1, l_2 \right\rangle$代表直线$l_1$与$l_2$间的夹角。轮廓描述符即为该角度值构成的矩阵$A$（$A_{ij}=\alpha_{ij}$）。
+%--------------------------
+\begin{figure}\centering
+\includegraphics[width=\linewidth]{./Mat/AngleDesc.pdf}
+\caption{角度描述符示意图。}\label{FigAngleDesc}
+\end{figure}
+
+两轮廓$S$与$S'$的差异值定义为：
+\[J\left( {{\bf{A}},{\bf{A}}'} \right) = \mathop {\min }\limits_k \frac{1}{{{N^2}}}\sum\limits_{i = 0}^{N - 1} {\sum\limits_{j = 0}^{N - 1} {{{\left( {{{\bf{A}}_{\left[ {k + i,k + j} \right]}} - {\bf{A}}{'_{\left[ {i,j} \right]}}} \right)}^2}} } ,\]
+其中$\bf A$是$S$的轮廓描述符，大小为$M \times M$，${\bf A}'$是$C$的轮廓描述符，大小为$N \times N$（$N \le M$）。
+$A_{\left[,\right]}$是矩阵的元素。$V \left({\bf A}, {\bf A'} \right)$是匹配分数，指出$C$与$F$的差异程度。
 
 \textbf{建立轮廓层次索引} 在我们的方法中一个最大的挑战是快速地在数据库模型内找到与代理部件轮廓相匹配的轮廓。
 直接一个接一个地比较代理部件轮廓与各模型的轮廓明显不可行，因为匹配时间会随数据库模型数量的增大而急剧增大。
@@ -129,3 +122,16 @@ $P \left(s, s' \right)$为两超面片对应的直方图$H$与$H'$的${\chi ^2}$距离：
 %我们将所有的有效轮廓段添加到全局有效轮廓段列表内。有效轮廓段指该轮廓段与它最近的$k$个邻居间距（见\ref{SubSecCD}节）低于阈值$\varepsilon = 0.85$。
 %然后，我们对全局有效轮廓段列表内的轮廓段做聚类，聚类代表是聚类中心轮廓段。这些代表做为种子轮廓用于查询阶段（如图\ref{FigKNN}（c））。
 %聚类个数为${N \mathord{\left/ {\vphantom {N {80}}} \right. \kern-\nulldelimiterspace} {80}}$（$N$是全局有效轮廓段列表内轮廓段的个数）。 
+
+%查询轮廓（代理模型轮廓）整体做为一个轮廓段。模型轮廓在每个尺度下都由若干轮廓段构成（见\ref{SecRCKNNG}节）。
+%模型轮廓的轮廓段与查询轮廓相匹配，从而得到查询轮廓与模型轮廓的局部匹配。为了比较两个轮廓段，我们为它们计算轮廓描述符。类似~\cite{GuoSGP2016}，我们采用Riemenschneider等人~\cite{Riemenschneider2010}提出的角度矩阵做为轮廓描述符。
+%该描述符描述了轮廓段上采样点间的空间分布。我们为轮廓提取描述符，在不同的采样距离下$\Theta  = \left\{ {3,6,9,12,15} \right\}$提取轮廓描述符。
+%一个轮廓段内有$m$个采样点。给一对采样点$\left(b_i, b_j \right)$，我们计算角度值$\alpha_{ij}$：
+%\[{\alpha _{ij}} = \left\{ {\begin{array}{*{20}{c}}
+%{\left\langle {\overline {{b_i}{b_j}} ,\overline {{b_i}{b_{i + \Delta }}} } \right\rangle } & {\text{if~} i < j,}  \\
+%{\left\langle {\overline {{b_i}{b_j}} ,\overline {{b_i}{b_{i - \Delta }}} } \right\rangle } & {\text{if~} i > j,}  \\
+%0 & {\text{if~} \left\| {i - j} \right\| \le \Delta }  \\
+%\end{array}} \right.\]
+%其中，$\delta=2$是偏移量，$\left\langle l_1, l_2 \right\rangle$代表直线$l_1$与$l_2$间的夹角。轮廓描述符即为该角度值构成的矩阵$A$（$A_{ij}=\alpha_{ij}$）。
+%两个轮廓段$S$与$T$间的距离是两轮廓段的角度矩阵$A^S$与$A^T$的欧式距离：
+%\[ D(S, T) = \frac{1}{m^2} \sum_{i = 1}^m \sum_{j = 1}^m \left( A^S_{ij} - A^T_{ij} \right)^2\]
