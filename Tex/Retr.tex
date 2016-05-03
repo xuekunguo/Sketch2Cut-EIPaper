@@ -2,7 +2,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{候选部件搜索}
-本章中，我们介绍RC-$k$NNG如何从未做预分割的模型数据库内快速地精确地搜索出与代理模型相匹配候选部件。
+本章中，我们介绍如何从未做预分割的模型数据库内快速且精确地搜索出与代理模型相匹配的候选部件。
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{代理模型创建}
@@ -33,30 +33,28 @@
 给三维代理部件与数据库模型，我们的目标是在数据库模型上找到候选部件，该候选部件与三维代理部件最相似，通过基于超面片图的多视角模型匹配方法。
 我们首先找到候选三维部件的二维轮廓，通过将代理轮廓与数据库轮廓做匹配。三维候选部件的超面片然后被指示出来，通过graph-cut技术，在超面片图上。
 
-\textbf{轮廓匹配} 轮廓匹配通过轮廓对应的轮廓描述符匹配实现。给一个通过三维代理轮廓$C$；及数据库模型轮廓$S$；
-我们的目标是在$S$上找到与$C$最匹配的部分$F$，使其与$C$最相似。该问题形式化如下：
-%\[V\left( {{\bf{A}},{\bf{A}}'} \right) = \mathop {\min }\limits_k \frac{1}{{{N^2}}}\sum\limits_{i = 0}^{N - 1} {\sum\limits_{j = 0}^{N - 1} {{{\left( {{A_{\left[ {k + i,k + j} \right]}} - A_{\left[ {i,j} \right]}^'} \right)}^2}} } ,\]
-其中，$\bf A$是$S$的轮廓描述符，大小为$M \times M$，${\bf A}'$是$C$的轮廓描述符，大小为$N \times N$（$N \le M$）。
-$A_{\left[,\right]}$是矩阵的元素。$V \left({\bf A}, {\bf A'} \right)$是匹配分数，指出$C$与$F$的差异程度。
+\textbf{轮廓匹配} 轮廓匹配通过轮廓描述符匹配实现。对代理模型轮廓$C$，我们的采样距离为9。
+对数据库模型轮廓$S$，我们在一组采样距离下采样$\Theta  = \left\{ {3,6,9,12,15} \right\}$。
+轮廓匹配计算方法见~\ref{SubSecCtourIndex}节。
 
-\textbf{候选轮廓段搜索} 一个数据库模型的所有轮廓与三维代理部件轮廓的匹配结果组织为$\left\| {{\Theta _M}} \right\|$个匹配结果组内，根据采样距离。
+\textbf{候选轮廓段搜索} 一个数据库模型的所有轮廓与代理模型轮廓的匹配结果组织为$\left\| {{\Theta _M}} \right\|$个匹配结果组内，根据采样距离。
 为了找到最佳匹配结果，我们首先找到最佳匹配结果组。
-给定代理轮廓$C$及其采样距离$\theta_B$，数据库模型轮廓$\Gamma_M$及其采样距离$\Theta_M$，最佳匹配结果组选择问题形式化为：
+给定代理轮廓$C$，数据库模型轮廓$\Gamma_M$及其采样距离$\Theta_M$，最佳匹配结果组选择问题形式化为：
 \[\mathop {\min }\limits_{{\theta _i} \in {\Theta _M}} \sum {J_{{\theta _i}}^j} ,\]
-其中$j_{\theta_i}^j$表示第$j$个匹配结果的匹配分数，在采样距离$\theta_i$下得到的。
+其中$J_{\theta_i}^j$表示第$j$个匹配结果的匹配分数（见公式（~\ref{EquCtourMatch}）），在采样距离$\theta_i$下得到的。
 我们选择出得到最低的3个匹配结果，从最佳匹配结果组内，并得到候选轮廓段。得到候选轮廓段的视角是候选视角。
 
-\textbf{候选部件提取} 给一个候选轮廓及其数据库模型，该数据库模型表示为超面片图表示形式。
-我们的目标是找到候选三维部件的超面片图，该候选部件在候选视角下与候选轮廓最相似（如图~\ref{FigPartIden}）。
+\textbf{候选部件搜索} 给一个候选轮廓及其对应的数据库模型，该数据库模型表示为超面片图表示形式。
+我们的目标是在该数据库模型的超面片图上找到候选三维部件，该候选部件在候选视角下与候选轮廓最相似（如图~\ref{FigPartRetr}）。
 我们将三维候选部件的指认问题形式化为子图搜索问题，目标函数为：
 \[\mathop {\min }\limits_L \left( {\sum\limits_{{v_i} \in V} {{D_{{v_i}}}\left( {{L_{{v_i}}}} \right) + \sum\limits_{\left( {{v_i},{v_j}} \right) \in E} {{S_{{v_i},{v_j}}}\left( {{L_{{v_i}}},{L_{{v_j}}}} \right)} } } \right),\]
 其中，超面片图$G = \left( V, E \right)$，$V$表示顶点集合，$E$表示边集合。$L = \left\{ {{L_{{v_i}}}|{v_i} \in V} \right\}$是超面片图$G$的一个标记。
 $D_{v_i} \left( L_{v_i} \right)$是数值项，计算将标志$L_{v_i}$置给$v_i$的能量耗费。$S_{v_i, v_j} \left(L_{v_i}, L_{v_j} \right)$是光滑项，鼓励相邻顶点$v_i$与$v_j$的空间一致性。
 %--------------------------
 \begin{figure}\centering
-\includegraphics[width=1.0\linewidth]{./Mat/PartIden.pdf}
-\caption{三维候选部件指认技术流程。给一个候选轮廓（蓝色（a）），我们首先计算OSF obj-prob（b）。obj-prob的值映射至不同颜色。红色表示高值。绿色表示低值。
-然后，ISF obj-prob计算出来（c）。最后，三维候选部件的超面片通过graph-cut技术指认出来（d）。}\label{FigPartIden}
+\includegraphics[width=1.0\linewidth]{./Mat/PartRetr.pdf}
+\caption{三维候选部件指认技术流程。给一个候选轮廓（蓝色（a）），我们首先计算OSF obj-prob（b）。
+然后，ISF obj-prob计算出来（c）。最后，三维候选部件的超面片通过graph-cut技术指认出来（d）。}\label{FigPartRetr}
 \end{figure}
 
 该目标函数采用min-cut/max-flow技术求解~\cite{Boykov2004}。n-links的容量是图内边的权重。t-links的容量定义为：
@@ -78,7 +76,7 @@ $\bf Y$是OSF的概率。
 
 在计算兼容性的时候，我们考虑如下因素：1）候选部件与代理部件间的二维投影的相似性；2）候选部件与三维代理部件间三维相似性；
 3）候选部件与三维代理部件间的背景一致性。给一个候选部件$p$（$p$提取自数据库模型$M$），三维代理部件$B$，两者的兼容性定义如下：
-\[J\left( {p,B} \right) = \omega {T_p}\left( {p,B} \right) + \xi {T_g}\left( {p,B} \right) + \psi {T_c}\left( {\Sigma ,{\rm X}} \right),\]
+\[T\left( {p,B} \right) = \omega {T_p}\left( {p,B} \right) + \xi {T_g}\left( {p,B} \right) + \psi {T_c}\left( {\Sigma ,{\rm X}} \right),\]
 其中，$\Sigma$指$p$的背景区域，$\rm X$指$B$的背景区域，$\omega=0.8$，$\xi = 0.15$，$\psi = 0.05$。
 $T_p \left( \cdot, \cdot \right)$计算三维模型的二维投影的相似性。$T_g \left( \cdot, \cdot \right)$计算三维模型的三维相似性。$T_c \left(, \right)$计算三维模型间的一致性。
 
@@ -94,7 +92,7 @@ $V \left(, \right)$的定义见方程（2）。$\omega_m = 0.9$，$\omega_a = 0.1$。
 \textbf{背景一致性} ${T_c}\left( {\Sigma ,{\rm X}} \right)$定义如下：
 \[{T_c}\left( {\Sigma ,{\rm X}} \right) = {T_g}\left( {{\rm X},\Sigma } \right).\]
 
-兼容性分数值低于$\theta_j$的候选部件被丢弃。留下的候选部件排序后建议给用户。如果需要多样性的部件建议，候选部件用Maximal Marginal Relevance criterion~\cite{Chaudhuri2010}技术重新排序。
+兼容性分数值低于某阈值的候选部件被丢弃。留下的候选部件排序后建议给用户。如果需要多样性的部件建议，候选部件用Maximal Marginal Relevance criterion~\cite{Chaudhuri2010}技术重新排序。
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %我们需要先找到$c=9$个与代理模型匹配上的数据库模型（称为候选模型），然后再从候选模型中提取出候选部件建议给用户。
