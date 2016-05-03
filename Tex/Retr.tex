@@ -29,12 +29,10 @@
 这里的体积变化指画草图前后代理模型的体积之差。
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{候选部件提取}
-给三维代理部件与数据库模型，我们的目标是在数据库模型上找到候选部件，该候选部件与三维代理部件最相似，通过基于超面片图的多视角模型匹配方法。
-我们首先找到候选三维部件的二维轮廓，通过将代理轮廓与数据库轮廓做匹配。三维候选部件的超面片然后被指示出来，通过graph-cut技术，在超面片图上。
+\subsection{候选轮廓搜索}
 
-\textbf{轮廓匹配} 轮廓匹配通过轮廓描述符匹配实现。对代理模型轮廓$C$，我们的采样距离为9。
-对数据库模型轮廓$S$，我们在一组采样距离下采样$\Theta  = \left\{ {3,6,9,12,15} \right\}$。
+\textbf{轮廓匹配} 轮廓匹配通过轮廓描述符匹配实现。计算代理模型轮廓描述符时，采样距离为9。
+计算数据库模型轮廓描述符时，采样距离为$\Theta  = \left\{ {3,6,9,12,15} \right\}$。
 轮廓匹配计算方法见~\ref{SubSecCtourIndex}节。
 
 \textbf{候选轮廓段搜索} 一个数据库模型的所有轮廓与代理模型轮廓的匹配结果组织为$\left\| {{\Theta _M}} \right\|$个匹配结果组内，根据采样距离。
@@ -44,7 +42,39 @@
 其中$J_{\theta_i}^j$表示第$j$个匹配结果的匹配分数（见公式（~\ref{EquCtourMatch}）），在采样距离$\theta_i$下得到的。
 我们选择出得到最低的3个匹配结果，从最佳匹配结果组内，并得到候选轮廓段。得到候选轮廓段的视角是候选视角。
 
-\textbf{候选部件搜索} 给一个候选轮廓及其对应的数据库模型，该数据库模型表示为超面片图表示形式。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{候选部件搜索}
+给三维代理部件与数据库模型，我们的目标是在数据库模型上找到候选部件，该候选部件与三维代理部件最相似，通过基于超面片图的多视角模型匹配方法。
+我们首先找到候选三维部件的二维轮廓，通过将代理轮廓与数据库轮廓做匹配。三维候选部件的超面片然后被指示出来，通过graph-cut技术，在超面片图上。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{三维模型的超面片图表示}
+我们在预处理阶段为数据库模型建立超面片图表示形式~\cite{GuoSGP2016}。图上顶点表示超面片。图上边描述超面片间空间相邻关系。边上权重表示相邻超面片合并成更大超面片的先验概率（如图~\ref{FigSFG}）。
+%--------------------------
+\begin{figure}\centering
+\includegraphics[width=\linewidth]{./Mat/SFG.pdf}
+\caption{三维模型超面片图建立过程示意图。给一个Deer模型（a），我们将它分割成200个超面片（b）。
+一个超面片是超面片图的一个顶点。相邻超面片由带权重的边连接（c）。}\label{FigSFG}
+\end{figure}
+
+为了建立超面片图，我们首先将模型分割成200个片断~\cite{Huang2011}。一个片断视一个超面片。相邻超面片间用一条边相连。
+
+为了计算边权重，我们对三维模型做多次Randomized Segmentation~\cite{Golovinskiy2008}。
+对每一次分割结果，我们为每个超面片建立一个直方图，描述该超面片属于各分割片断的概率（如图\ref{FigSFDist}）。超面片$s$针对分割部件$g$的直方条$h_s^g$定义为：
+\[h_s^g = \frac{{\sum\limits_{f \in F\left( g \right) \cap F\left( s \right)} {A\left( f \right)} }}{{\sum\limits_{f \in F\left( s \right)} {A\left( f \right)} }},\]
+其中，$F \left(x \right)$是属于$x$的面片集合，$A \left( f \right)$是面片$f$的面积。相邻面片$s$与$s'$位于同一部件的概率$P \left(s, s' \right)$为两超面片的直方图$H$与$H'$的${\chi ^2}$的距离：
+\[P\left( {s,s'} \right) = 1 - {\chi ^2}\left( {H,H'} \right) = 1 - \frac{1}{2}\sum\limits_{{g_i} \in G} {\frac{{{{\left( {h_s^{{g_i}} - h_{s'}^{{g_i}}} \right)}^2}}}{{{{\left( {h_s^{{g_i}} + h_{s'}^{{g_i}}} \right)}^2}}}} ,\]
+其中$G = \left\{ {{g_i}|1 \le i \le N} \right\}$是一次分割结果的所有片断。为了得到超面片图上边的权重，我们首先将两超面片在不同分割结果上的概率累加，再通过分割次数归一化。
+%--------------------------
+\begin{figure}\centering
+\includegraphics[width=\linewidth]{./Mat/SFDist.pdf}
+\caption{超面片在分割片断上的分布示意图。$s_0$，$s_1$和$s_2$是超面片。$g_0$，$g_1$与$g_2$是通过Randomized Segmentation~\cite{GF08}得到的分割片断。}\label{FigSFDist}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{候选部件提取}
+给一个候选轮廓及其对应的数据库模型，该数据库模型表示为超面片图表示形式。
 我们的目标是在该数据库模型的超面片图上找到候选三维部件，该候选部件在候选视角下与候选轮廓最相似（如图~\ref{FigPartRetr}）。
 我们将三维候选部件的指认问题形式化为子图搜索问题，目标函数为：
 \[\mathop {\min }\limits_L \left( {\sum\limits_{{v_i} \in V} {{D_{{v_i}}}\left( {{L_{{v_i}}}} \right) + \sum\limits_{\left( {{v_i},{v_j}} \right) \in E} {{S_{{v_i},{v_j}}}\left( {{L_{{v_i}}},{L_{{v_j}}}} \right)} } } \right),\]
@@ -53,7 +83,7 @@ $D_{v_i} \left( L_{v_i} \right)$是数值项，计算将标志$L_{v_i}$置给$v_i$的能量耗费
 %--------------------------
 \begin{figure}\centering
 \includegraphics[width=1.0\linewidth]{./Mat/PartRetr.pdf}
-\caption{三维候选部件指认技术流程。给一个候选轮廓（蓝色（a）），我们首先计算OSF obj-prob（b）。
+\caption{三维候选部件指认技术流程。给一个候选轮廓（（a）内红色部分），我们首先计算OSF obj-prob（b）。
 然后，ISF obj-prob计算出来（c）。最后，三维候选部件的超面片通过graph-cut技术指认出来（d）。}\label{FigPartRetr}
 \end{figure}
 
