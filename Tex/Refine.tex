@@ -8,7 +8,7 @@
 \caption{\TODO{Í¼ÄÚÒªproxyÓëmodel alignµ½Ò»Æğ£»Èı¸öROIÇøÓò²»Í¬ÑÕÉ«ÏÔÊ¾³ö£»×óÓÒÁ½ÕÅ×ÓÍ¼£¬×ó²à×ÓÍ¼¸ø³öÔ¤¼ÆËã³öÀ´µÄ¸÷ÖÖÁ¿£¬ÓÒ²à¸ø³öÓÅ»¯½á¹û£»
 ·´ÕıÕâÕÅÍ¼ÀàËÆFig 8£¬Õ¹Ê¾Õâ²¿·ÖËã·¨Á÷³Ì¡£}}\label{FigPartRefine}
 \end{figure}
-Ê×ÏÈ£¬ÎÒÃÇÔÚºòÑ¡²¿¼şÉÏÈ¡µÃÓëÇĞ¸îÏß¾àÀëÎª$l_{dia}$µÄÃæÆ¬£¨¼ÇÎª$\Omega_{obj}$£¬$l_{dia}$±íÊ¾ºòÑ¡²¿¼ş°üÎ§ºĞ¶Ô½ÇÏß³¤£©¡£
+Ê×ÏÈ£¬ÎÒÃÇÔÚºòÑ¡²¿¼şÉÏÈ¡µÃÓëÇĞ¸îÏß¾àÀëÎª$l_{dia}$µÄÃæÆ¬£¨¼ÇÎª$\Omega_{obj}$£¬$l_{dia}$±íÊ¾ºòÑ¡²¿¼ş°üÎ§ºĞ¶Ô½ÇÏß³¤¶È£©¡£
 È»ºó£¬ÓÃÀàËÆ·½·¨£¬ÔÚºòÑ¡²¿¼şµÄ²¹²¿¼şÉÏµÃµ½$\Omega_{obj}'$£¬ÔÚ´úÀí²¿¼şÉÏµÃµ½$\Omega_{proxy}$¡£
 ½Ó×Å£¬ÎÒÃÇ´óÖÂµØ¶ÔÆë$\Omega_{obj}$Óë$\Omega_{proxy}$¡£ºòÑ¡²¿¼şÓÅ»¯ÎÊÌâ±»ĞÎÊ½»¯³ÉÄÜÁ¿ÓÅ»¯ÎÊÌâ£¬ÆäÄ¿±êº¯ÊıÈçÏÂ£º
 \[E\left( X \right) = \sum\limits_{{v_i} \in {\nu ^f}} {{E_d}\left( {{x_{{v_i}}}} \right) + \sum\limits_{\left( {{v_i},{v_j}} \right) \in {\varepsilon ^f}} {{E_s}\left( {{x_{{v_i}}},{x_{{v_j}}}} \right)} ,} \]
@@ -22,7 +22,7 @@ ${\rm X} = \left\{ {{x_{{v_i}}}|{v_i} \in \nu } \right\}$£¨$x_{v_i} = \left\{ 0,
 ÆäÖĞ$D_{obj} \left(v_i \right)$±íÊ¾½«±ê¼Ç1ÖÃ¸ø$v_i$µÄ¸ÅÂÊ£¬¶¨ÒåÈçÏÂ£º
 \[{D_{obj}}\left( {{v_i}} \right) = {\omega _c}{g_c}\left( {{v_i}} \right) + {\omega _s}{g_s}\left( {{v_i}} \right),\]
 ÆäÖĞ$\omega_c = 0.5 + 0.2d$£¨$d$±íÊ¾$v_i$Óë³õÊ¼ÇĞ¸îÏß¼ä¾à£©¡£$\omega_s = 1 - \omega_c$£¨$\omega_s \ge 0$£©¡£
-$g_s \left( v_i \right)$ÊÇ$v_i$Óë$\Omega_{proxy}$¼äµÄ¾àÀë£¬¶¨ÒåÈçÏÂ£º
+$g_s \left( v_i \right)$ÊÇ$v_i$Óë$\Omega_{proxy}$¼äµÄ¾àÀë¡£${g_c}\left( {{v_i}} \right)$
 \[{g_c}\left( {{v_i}} \right) = \left\{ {\begin{array}{*{20}{c}}
    {\frac{{vol\left( {{\Omega _{obj}}} \right)}}{{vol\left( {{\Omega _{proxy}}} \right)}},} & {{v_i} \in {\Omega _{obj}},}  \\
    {\frac{{vol\left( {\Omega {'_{obj}}} \right)}}{{vol\left( {{\Omega _{proxy}}} \right)}},} & {{v_i} \in \Omega {'_{obj}},}  \\
@@ -32,6 +32,6 @@ $V \left( \cdot \right)$¼ÆËãÄ£ĞÍÌå»ı¡£$E_s \left( x_{v_i}, x_{v_j} \right)$ÊÇ¹â»
    {0,} & {{x_{{v_i}}} = {x_{{v_j}}},}  \\
    {\exp \left( {\frac{{2\theta }}{\pi }} \right)} & {{x_{{v_i}}} \ne {x_{{v_j}}},}  \\
 \end{array}} \right.\]
-ÆäÖĞ$\theta  \in \left[ {0,\frac{\pi }{2}} \right]$ÊÇÃæÆ¬$v_i$Óë$v_j$µÄ¹«¹²±ßÓë·Ö¸îÏßÄâºÏÆ½Ãæ¼äµÄ¼Ğ½Ç¡£ 
+ÆäÖĞ$\theta  \in \left[ {0,\frac{\pi }{2}} \right]$ÊÇÃæÆ¬$v_i$Óë$v_j$µÄ¹«¹²±ßÓë·Ö¸îÏßÄâºÏÆ½Ãæ¼äµÄ¼Ğ½Ç¡£
 
-ºòÑ¡²¿¼şÓÅ»¯ÊÇ¿ÉÑ¡Ïî£¬²»»á¶Ô×îÖÕÔìĞÍ½á¹ûÓĞÌ«´óÓ°Ïì¡£
+ºòÑ¡²¿¼şÓÅ»¯ÊÇ¿ÉÑ¡Ïî£¬²»»á¶Ô×îÖÕÔìĞÍ½á¹ûÓĞÌ«´óÓ°Ïì¡£ 

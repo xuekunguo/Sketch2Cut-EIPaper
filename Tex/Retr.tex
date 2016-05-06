@@ -2,7 +2,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{候选部件搜索}
-本章中，我们介绍如何从未做预分割的模型数据库内快速、精确地搜索出与代理模型相匹配的候选部件。
+本章中，我们介绍如何从未做预分割的模型数据库内快速搜索出一系列候选部件。
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{代理模型创建}\label{SubSecProxy}
@@ -14,9 +14,9 @@
 广义球体通过Nealen等人~\cite{AndrewNealen2007}的方法生成。
 广义柱体通过两笔生成：首先，在当前模型上画一个圆圈表示柱体底座；然后，画一条曲线指示柱体中心线。中心线位于用户视线方向与圆圈起点定义的空间平面上。
 广义柱体的两端可以放缩，得到圆锥或圆台。
-创建薄板模型，用户首先在当前模型上画一条曲线，再画出薄板模型轮廓线。
+要创建薄板模型，用户首先在当前模型上画一条曲线，再画出薄板模型轮廓线。
 该轮廓线位于用户视线方向与曲线起点定义的空间平面上。
-我们的系统允许用户对三种基础代理模型施加放缩、切割、变形等操作。更复杂的代理模型可以通过基础代理组合得到。
+我们的系统允许用户对三种基础代理模型施加放缩、切割、变形等操作。更复杂的代理模型可以通过基础代理模型组合得到。
 %--------------------------
 \begin{figure}\centering
 \includegraphics[width=\linewidth]{./Mat/Proxy.pdf}
@@ -24,8 +24,8 @@
 \end{figure}
 
 用户创建代理模型过程中，系统记录每次操作的视角及操作前后代理模型体积的变化。
-代理模型建成后，我们提取代理模型在体积变化最大的视角下的二维轮廓（该轮廓称为主轮廓），用于描述用户的建模意图。
-体积变化次之的视角下提取的轮廓是副轮廓，用于候选部件排序。最后，我们采用第\ref{SubSecCtourDesc}节提出的方法提取主、副轮廓的描述符（采样距离为9）。
+代理模型建成后，我们提取代理模型在体积变化最大的视角下的二维轮廓（该轮廓称为主轮廓），用于描述用户造型意图。
+体积变化次之的视角下提取的轮廓是副轮廓，用于候选部件排序。最后，我们采用第\ref{SubSecCtourDesc}节介绍的方法提取主、副轮廓描述符（采样距离为9）。
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{候选部件搜索}\label{SubSecPartRetr}
@@ -38,8 +38,8 @@
 为了选择出候选轮廓段，我们首先选择出最佳匹配结果组。
 给定代理轮廓$C$，数据库模型轮廓$\Gamma_M$及其采样距离$\Theta_M$，最佳匹配结果组选择问题定义为：
 \[\mathop {\min }\limits_{{\theta _i} \in {\Theta _M}} \sum {J_{{\theta _i}}^j} ,\]
-其中$J_{\theta_i}^j$表示在采样距离$\theta_i$下最好的第$j$个匹配结果的匹配分数（见公式（\ref{EquCtourMatch}））。
-我们从最佳匹配结果组内选择出最好的前3个匹配结果，并由此得到候选轮廓段。
+其中$J_{\theta_i}^j$表示在采样距离$\theta_i$下最好的第$j$个匹配结果（见公式（\ref{EquCtourMatch}））。
+我们从最佳匹配结果组内选择出最好的前3个匹配结果并得到候选轮廓段。
 
 %--------------------------
 \subsubsection{三维模型的超面片图表示}\label{SubSubSecSFG}
@@ -55,64 +55,64 @@
 为了建立超面片图，我们首先将模型分割成200个片断~\cite{Huang2011}。一个片断视一个超面片。相邻超面片用一条边相连。
 
 为了计算边权重，我们对三维模型做多次Randomized Segmentation~\cite{Golovinskiy2008}。
-对每一次分割结果，我们为每个超面片建立一个直方图，描述该超面片属于各分割片断的概率（如图\ref{FigSFDist}）。超面片$s$针对分割部件$g$的直方条$h_s^g$定义为：
+对每一次分割结果，我们为每个超面片建立直方图，记录该超面片属于各分割片断的概率（如图\ref{FigSFDist}）。超面片$s$针对分割部件$g$的直方条$h_s^g$定义为：
 \[h_s^g = \frac{{\sum\limits_{f \in F\left( g \right) \cap F\left( s \right)} {A\left( f \right)} }}{{\sum\limits_{f \in F\left( s \right)} {A\left( f \right)} }},\]
-其中$F \left(x \right)$是属于$x$的面片集合，$A \left( f \right)$是面片$f$的面积。相邻面片$s$与$s'$位于同一部件的概率$P \left(s, s' \right)$为两超面片的直方图$H$与$H'$的${\chi ^2}$的距离：
+其中$F \left(x \right)$是属于$x$的面片集合，$A \left( f \right)$是面片$f$的面积。相邻超面片$s$与$s'$位于同一部件的概率$P \left(s, s' \right)$为两超面片的直方图$H$与$H'$的${\chi ^2}$的距离：
 \[P\left( {s,s'} \right) = 1 - {\chi ^2}\left( {H,H'} \right) = 1 - \frac{1}{2}\sum\limits_{{g_i} \in G} {\frac{{{{\left( {h_s^{{g_i}} - h_{s'}^{{g_i}}} \right)}^2}}}{{{{\left( {h_s^{{g_i}} + h_{s'}^{{g_i}}} \right)}^2}}}} ,\]
-其中$G = \left\{ {{g_i}|1 \le i \le N} \right\}$是一次分割结果的所有片断。为了得到超面片图上边的权重，我们首先将相关的两超面片在不同分割结果上的概率累加，再通过分割次数归一化。
+其中$G = \left\{ {{g_i}|1 \le i \le N} \right\}$是一次分割结果的所有片断。为了得到超面片图上边的权重，我们首先将边相连的两超面片在不同分割结果上的概率累加，再通过分割次数归一化。
 %--------------------------
 \begin{figure}\centering
 \includegraphics[width=\linewidth]{./Mat/SFDist.pdf}
-\caption{超面片在分割片断上的分布示意图。$s_0$，$s_1$和$s_2$是超面片。$g_0$，$g_1$与$g_2$是通过Randomized Segmentation~\cite{Golovinskiy2008}得到的分割片断。\TODO{这个图左侧[s0,s2]改样子，右侧改数据。}}\label{FigSFDist}
+\caption{超面片在分割片断上的分布示意图。$s_0$，$s_1$和$s_2$是超面片。$g_0$，$g_1$与$g_2$是通过Randomized Segmentation~\cite{Golovinskiy2008}得到的分割片断。}\label{FigSFDist}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{候选部件搜索}\label{SubSubSecPartRetr}
-给一个候选轮廓及数据库模型，我们的目标是在数据库模型上找到与候选轮廓最匹配的候选部件。
+给一个候选轮廓及数据库模型，我们的目标是在数据库模型上找到与候选轮廓最匹配的部件（候选部件）。
 我们将候选部件搜索问题形式化为超面片图上的子图搜索问题（如图~\ref{FigPartRetr}），其目标函数如下：
 \[\mathop {\min }\limits_L \left( {\sum\limits_{{v_i} \in V} {{D_{{v_i}}}\left( {{L_{{v_i}}}} \right) + \sum\limits_{\left( {{v_i},{v_j}} \right) \in E} {{S_{{v_i},{v_j}}}\left( {{L_{{v_i}}},{L_{{v_j}}}} \right)} } } \right),\]
-其中超面片图$G = \left( V, E \right)$，$V$表示顶点集合，$E$表示边集合。$L = \left\{ {{L_{{v_i}}}|{v_i} \in V} \right\}$是超面片图$G$的一个标记。
+其中超面片图$G = \left( V, E \right)$（$V$表示顶点集合，$E$表示边集合）。$L = \left\{ {{L_{{v_i}}}|{v_i} \in V} \right\}$是超面片图$G$的一个标记。
 $D_{v_i} \left( L_{v_i} \right)$是数值项，表示将标记$L_{v_i}$置给$v_i$的能量耗费。$S_{v_i, v_j} \left(L_{v_i}, L_{v_j} \right)$是光滑项，表示相邻顶点$v_i$与$v_j$具有相同标记的能量耗费。
 %--------------------------
 \begin{figure}\centering
 \includegraphics[width=1.0\linewidth]{./Mat/PartRetr.pdf}
 \caption{候选部件搜索算法流程。给一个候选轮廓（（a）内红色部分），我们首先计算外超面片obj-prob（b）；
-然后计算内超面片obj-prob（c）；最后通过graph-cut技术得到整个候选部件（d）。
-\TODO{优化该图；颜色条字再大些。inner super-face, outer super-face}}\label{FigPartRetr}
+然后计算内超面片obj-prob（c）；最后通过graph-cut技术得到整个候选部件（d）。}\label{FigPartRetr}
 \end{figure}
 
-该目标函数采用min-cut/max-flow技术求解~\cite{Boykov2004}。n-links的容量是图内边的权重。t-links的容量定义为：
+我们采用min-cut/max-flow技术~\cite{Boykov2004}求解方法。n-links的容量是边权重。t-links的容量定义为：
 \[{D_{{v_i}}}\left( 1 \right) =  - \ln \Pr \left( {{I_{{v_i}}}|'obj'} \right),\]
 \[{D_{{v_i}}}\left( 0 \right) =  - \ln \left( {1 - \Pr \left( {{I_{{v_i}}}|'obj'} \right)} \right),\]
 其中$Pr \left( I_{v_i} | 'obj' \right)$（obj-prob）表示$v_i$属于候选部件的概率。
 
-对外部超面片（自身轮廓与模型轮廓有重叠的超面片），obj-prob通过其自身轮廓与候选轮廓的重合程度得到。
-超面片图内，除了外部超面片之外的超面片称为内部超面片。我们认为，在超面片图内外部超面片与内部超面片的obj-prob相一致。
-因此，整张图内的obj-prob可以形化为：
+对外部超面片（自身轮廓与模型轮廓有重叠的超面片），obj-prob通过其自身轮廓与候选轮廓的重合度得到。
+我们认为，外部超面片与内部超面片（除了外部超面片之外的）的obj-prob相一致。
+因此，整个超面片图的obj-prob可以形化为：
 \[{\bf{AX}} = {\bf{b}},\]
 条件为：
 \[{\bf{X}} \ge 0,\]
-其中${\bf{A}} = {\bf{I}} - {\bf{A}}'$，$\bf A'$是带权重的相邻矩阵，在ISFs之间。$\bf X$是ISF的概率。${\bf b} = {\bf B Y }$，其中$\bf B$是ISF与OSF间的带权相邻矩阵，
-$\bf Y$是OSF的概率。
+其中${\bf{A}} = {\bf{I}} - {\bf{A}}'$，$\bf A'$是带权重的内部超面片间的相邻矩阵。$\bf X$是内部超面片obj-prob值。
+${\bf b} = {\bf B Y }$，其中$\bf B$是内部超面片与外部超面片间的带权相邻矩阵，$\bf Y$是内部超面片obj-prob值。
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{候选部件排序}
-%-------------------------- 
+%--------------------------
 \begin{figure}\centering
 %\includegraphics[width=1.0\linewidth]{./Mat/PartRetr.pdf}
 \missingfigure{}
-\caption{\TODO{类似sketch-to-design Fig 4，来张图，展示三个量}}\label{FigPartRetr}
+\caption{\TODO{类似sketch-to-design Fig 4，来张图，展示三个量}}\label{FigPartRank}
 \end{figure}
-我们基于候选部件与代理部件的兼容性对候选部件排序。在计算兼容性时，我们考虑如下因素：1）候选部件的二维投影与代理部件的相似性；
+我们基于候选部件与代理部件的兼容性对候选部件排序。在计算兼容性时，我们考虑如下因素：
+1）候选部件的二维投影与代理部件的相似性；
 2）候选部件与代理部件的几何相似性；3）候选部件的背景与代理部件的相似性。
-给一个候选部件$p$（$p$取自数据库模型$M$）与代理部件$B$，两者的兼容性定义如下：
+给一个候选部件$p$（$p$来自数据库模型$M$）与代理部件$B$，两者的兼容性定义如下：
 \[J\left( {p,B} \right) = \omega {T_p}\left( {p,B} \right) + \xi {T_g}\left( {p,B} \right) + \psi {T_c}\left( {p,B} \right),\]
 其中$\omega=0.8$，$\xi = 0.15$，$\psi = 0.05$。$T_p \left( \cdot, \cdot \right)$计算模型二维投影的相似性。
 $T_g \left( \cdot, \cdot \right)$计算模型的几何相似性。$T_c \left(, \right)$计算模型背景的相似性。
 
 \textbf{二维投影相似性} $T_p \left(p, B \right)$定义如下：
 \[{T_p}\left( {p,B} \right) = {\omega _m}\frac{1}{{\mathop {\min }\limits_i J\left( {{{\bf{A}}_m},{{\bf{A}}_i}} \right)}} + {\omega _a}\frac{1}{{\mathop {\min }\limits_i J\left( {{{\bf{A}}_a},{{\bf{A}}_i}} \right)}},\]
-其中${\bf A}_m$与${\bf A}_a$是$p$的主轮廓与副轮廓的描述符，在最佳采样距离下。${\bf A}_i$是$B$在最佳采样距离下第$i$（$1 \le i \le T_M$）个视角下的轮廓的描述符。
+其中${\bf A}_m$与${\bf A}_a$是$B$的主轮廓与副轮廓的描述符。${\bf A}_i$是$p$在第$i$（$1 \le i \le T_M$）个视角下的轮廓的描述符。
 $J \left(, \right)$的定义见公式（\ref{EquCtourMatch}）。$\omega_m = 0.9$，$\omega_a = 0.1$。
 
 \textbf{几何相似性} $T_g \left(p, B \right)$定义如下：
@@ -123,4 +123,5 @@ $J \left(, \right)$的定义见公式（\ref{EquCtourMatch}）。$\omega_m = 0.9$，$\omeg
 \[{T_c}\left( {p,B} \right) = {T_g}\left( {{\rm X},\Sigma } \right),\]
 其中$\Sigma$指$p$的背景（$M$上与$p$相邻的部件的集合）。$\rm X$指$B$的背景（当前模型上与$B$相邻的部件的集合）。
 
-候选部件基于兼容性分数由高低排列。如果用户需要多样性的部件建议，我们采用技术Maximal Marginal Relevance criterion~\cite{Chaudhuri2010}排列候选部件。
+候选部件基于兼容性分数由高低排列。
+如果用户需要多样性的部件建议，候选部件采用Maximal Marginal Relevance criterion技术~\cite{Chaudhuri2010}排列。 
