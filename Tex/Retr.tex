@@ -98,9 +98,8 @@ ${\bf b} = {\bf B Y }$，其中$\bf B$是内部超面片与外部超面片间的带权相邻矩阵，$\b
 \subsection{候选部件排序}
 %--------------------------
 \begin{figure}\centering
-%\includegraphics[width=1.0\linewidth]{./Mat/PartRetr.pdf}
-\missingfigure{}
-\caption{\TODO{类似sketch-to-design Fig 4，来张图，展示三个量}}\label{FigPartRank}
+\includegraphics[width=1.0\linewidth]{./Mat/PartRank.pdf}
+\caption{候选部件排序的三个因素：二维投影相似性（a）、几何相似性（b）、背景相似性（c）。}\label{FigPartRank}
 \end{figure}
 我们基于候选部件与代理部件的兼容性对候选部件排序。在计算兼容性时，我们考虑如下因素：
 1）候选部件的二维投影与代理部件的相似性；
@@ -124,4 +123,4 @@ $J \left(, \right)$的定义见公式（\ref{EquCtourMatch}）。$\omega_m = 0.9$，$\omeg
 其中$\Sigma$指$p$的背景（$M$上与$p$相邻的部件的集合）。$\rm X$指$B$的背景（当前模型上与$B$相邻的部件的集合）。
 
 候选部件基于兼容性分数由高低排列。
-如果用户需要多样性的部件建议，候选部件采用Maximal Marginal Relevance criterion技术~\cite{Chaudhuri2010}排列。 
+如果用户需要多样性的部件建议，我们采用Maximal Marginal Relevance criterion技术~\cite{Chaudhuri2010}对候选部件排序。

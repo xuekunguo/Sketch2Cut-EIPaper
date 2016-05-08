@@ -1,13 +1,13 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{候选部件优化}\label{SecPartRefine}
-%--------------------------
-\begin{figure}\centering
-%\includegraphics[width=1.0\linewidth]{./Mat/PartRetr.pdf}
-\missingfigure{}
-\caption{\TODO{图内要proxy与model align到一起；三个ROI区域不同颜色显示出；左右两张子图，左侧子图给出预计算出来的各种量，右侧给出优化结果；
-反正这张图类似Fig 8，展示这部分算法流程。}}\label{FigPartRefine}
-\end{figure}
+%%--------------------------
+%\begin{figure}\centering
+%%\includegraphics[width=1.0\linewidth]{./Mat/PartRetr.pdf}
+%\missingfigure{}
+%\caption{\TODO{图内要proxy与model align到一起；三个ROI区域不同颜色显示出；左右两张子图，左侧子图给出预计算出来的各种量，右侧给出优化结果；
+%反正这张图类似Fig 8，展示这部分算法流程。}}\label{FigPartRefine}
+%\end{figure}
 首先，我们在候选部件上取得与切割线距离为$l_{dia}$的面片（记为$\Omega_{obj}$，$l_{dia}$表示候选部件包围盒对角线长度）。
 然后，用类似方法，在候选部件的补部件上得到$\Omega_{obj}'$，在代理部件上得到$\Omega_{proxy}$。
 接着，我们大致地对齐$\Omega_{obj}$与$\Omega_{proxy}$。候选部件优化问题被形式化成能量优化问题，其目标函数如下：
