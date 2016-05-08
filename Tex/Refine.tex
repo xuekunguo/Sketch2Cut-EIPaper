@@ -12,7 +12,7 @@
 然后，用类似方法，在候选部件的补部件上得到$\Omega_{obj}'$，在代理部件上得到$\Omega_{proxy}$。
 接着，我们大致地对齐$\Omega_{obj}$与$\Omega_{proxy}$。候选部件优化问题被形式化成能量优化问题，其目标函数如下：
 \[E\left( X \right) = \sum\limits_{{v_i} \in {\nu ^f}} {{E_d}\left( {{x_{{v_i}}}} \right) + \sum\limits_{\left( {{v_i},{v_j}} \right) \in {\varepsilon ^f}} {{E_s}\left( {{x_{{v_i}}},{x_{{v_j}}}} \right)} ,} \]
-其中$G^f = \left( \nu^f, \varepsilon^f \right)$是${\Omega _{obj}} \cup \Omega'_{obj}$的对偶图。$\nu^f$是顶点集合。$\varepsilon^f$是边集合。
+其中$G^f = \left( \nu^f, \varepsilon^f \right)$是${\Omega _{obj}} \cup \Omega'_{obj}$的对偶图（$\nu^f$是顶点集合。$\varepsilon^f$是边集合）。
 ${\rm X} = \left\{ {{x_{{v_i}}}|{v_i} \in \nu } \right\}$（$x_{v_i} = \left\{ 0, 1 \right\}$）是$G^f$的一个标记。$E_d \left(x_{v_i} \right)$是数值项，表示将
 标记$x_{v_i}$置给$v_i$的能量耗费，定义如下：
 \[{E_d}\left( {{x_{{v_i}}}} \right) = \left\{ {\begin{array}{*{20}{c}}
@@ -22,12 +22,12 @@ ${\rm X} = \left\{ {{x_{{v_i}}}|{v_i} \in \nu } \right\}$（$x_{v_i} = \left\{ 0,
 其中$D_{obj} \left(v_i \right)$表示将标记1置给$v_i$的概率，定义如下：
 \[{D_{obj}}\left( {{v_i}} \right) = {\omega _c}{g_c}\left( {{v_i}} \right) + {\omega _s}{g_s}\left( {{v_i}} \right),\]
 其中$\omega_c = 0.5 + 0.2d$（$d$表示$v_i$与初始切割线间距）。$\omega_s = 1 - \omega_c$（$\omega_s \ge 0$）。
-$g_s \left( v_i \right)$是$v_i$与$\Omega_{proxy}$间的距离。${g_c}\left( {{v_i}} \right)$
+$g_s \left( v_i \right)$是$v_i$与$\Omega_{proxy}$间的距离。${g_c}\left( {{v_i}} \right)$的定义如下：
 \[{g_c}\left( {{v_i}} \right) = \left\{ {\begin{array}{*{20}{c}}
    {\frac{{vol\left( {{\Omega _{obj}}} \right)}}{{vol\left( {{\Omega _{proxy}}} \right)}},} & {{v_i} \in {\Omega _{obj}},}  \\
    {\frac{{vol\left( {\Omega {'_{obj}}} \right)}}{{vol\left( {{\Omega _{proxy}}} \right)}},} & {{v_i} \in \Omega {'_{obj}},}  \\
 \end{array}} \right.\]
-$V \left( \cdot \right)$计算模型体积。$E_s \left( x_{v_i}, x_{v_j} \right)$是光滑项，计算相邻顶点$v_i$与$v_j$具有相同标记的能量耗费，定义如下：
+$V \left( \cdot \right)$计算模型体积。$E_s \left( x_{v_i}, x_{v_j} \right)$是光滑项，表示相邻顶点$v_i$与$v_j$具有相同标记的能量耗费，定义如下：
 \[{E_s}\left( {{x_{{v_i}}},{x_{{v_j}}}} \right) = \left\{ {\begin{array}{*{20}{c}}
    {0,} & {{x_{{v_i}}} = {x_{{v_j}}},}  \\
    {\exp \left( {\frac{{2\theta }}{\pi }} \right)} & {{x_{{v_i}}} \ne {x_{{v_j}}},}  \\

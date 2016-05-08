@@ -44,29 +44,25 @@
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{\TODO{摘要}}
-在基于组合的创造力支持的造型技术中，最具挑战性的问题之一是如何实时地从三维模型数据库内提取合适的建议部件。
-我们提出Sketch2Cut系统，一个基于草图的按需要部件建议方法。该方法可以通过草图创建模型。
-用户输入草图表达设计概念，我们的方法基于草图生成三维代理部件，并基于该代理部件去数据库内搜索得到一系列候选部件，
-做为提示建议给用户。
-这些候选部件都是实时地从三维模型数据库中通过局部匹配方法分割出来的。
-与以前的工作不同，我们的Proxy-to-Design方法不依赖预分割的三维模型数据库，并可以建议定制的任意部件，
-这极大地扩展了用户设计空间。
-实验指出我们的方法提供了一种直观的简单的方法造型模型，允许普通用户造型有意思的模型。
-我们的方法同时也提供了一种基于草图的造型metaphor，去建造复杂的具有丰富细节的模型，通过样例。
+\section*{摘要}
+在基于部件组合的创造力支持的造型技术中，从数据库内实时提取可添加到当前模型的部件是最具挑战的问题之一。
+我们提出一种基于草图的按需部件建议方法。
+用户输入草图表达设计概念，我们的方法基于草图生成三维代理部件，并基于代理部件从数据库内提取一系列候选部件，做为提示建议给用户。
+候选部件通过局部匹配方法实时地从数据库模型内搜索得到。
+与以前的方法不同，我们的方法不依赖预分割的三维模型数据库，向用户建议任意个性化的部件，极大地扩展了造型空间。
+实验表明我们的方法简单而且直观，允许普通用户快捷方便地造型有意思的模型。
 
 创造力支持的造型；草图式造型；局部匹配；实时分割；
 
-Suggesting inspiring parts on-the-fly from collections of 3D models is a challenge in assembly-based creative modeling. 
-We present Sketch2Cut, a sketch-based on-demand part suggestion method for creating shapes using sketches. 
-After a user draws a simple abstract sketch which depicts his/her intention, 
-our method creates a 3D proxy based on the input sketch as a search key to retrieve a list of candidate parts, 
-each of which is segmented on-the-fly from the 3D models in the input database using partial matching. 
-In contrast to prior work, our proxy-to-design approach can customize arbitrary parts from input models and does not rely on predefined parts, 
-which significantly broadens the design space. 
-Experimental results indicate that our approach provides an intuitive and easy means to create novel designs, 
-and allows novices to generate interesting models that are otherwise difficult to attain. 
-Our approach also provides a new sketch-based modeling metaphor to create complex detailed models using examples.
+Suggesting inspiring parts on-the-fly from collections of 3D models is a challenge in assembly-based creative modeling.
+We present a sketch-based on-demand part suggestion method for creating shapes using sketches.
+After a user draws a simple abstract sketch which depicts his/her intention,
+our method creates a 3D proxy based on the input sketch as a search key to retrieve a list of candidate parts,
+each of which is segmented on-the-fly from the 3D models in the input database using partial matching.
+In contrast to prior work, our proxy-to-design approach can customize arbitrary parts from input models and does not rely on predefined parts,
+which significantly broadens the design space.
+Experimental results indicate that our approach provides an intuitive and easy means to create novel designs,
+and allows novices to generate interesting models that are otherwise difficult to attain.
 
 Creative modeling; Sketch-based modeling; Partial matching; on-the-fly segmentation
 
