@@ -1,0 +1,103 @@
+Igarashi2007
+[Iga07] Takeo Igarashi. Sketch-based interfaces for interactive computer graphics. In ACM SIGGRAPH 2007 Courses,
+SIGGRAPH ’07, New York, NY, USA, 2007. ACM.
+
+Igarashi1999SG
+[TSH99] Takeo Igarashi, Satoshi Matsuoka, and Hidehiko Tanaka. Teddy: a sketching interface for 3D freeform design.
+In Proceedings of ACM SIGGRAPH, pages 409-416, 1999.
+
+EitRicBouHilAle12
+[ERB+12] Mathias Eitz, Ronald Richter, Tamy Boubekeur, Kristian Hildebrand, and Marc Alexa. Sketch-based shape
+retrieval. ACM Transactions on Graphics, 31(4), 2012.
+
+Lee2008SBIM
+[LF08] Jeehyung Lee and Thomas Funkhouser. Sketch-based search and composition of 3d models. In Proceedings
+of the Fifth Eurographics Conference on Sketch-Based Interfaces and Modeling, SBM＊08, pages 97每104, Airela-Ville, Switzerland, Switzerland, 2008. Eurographics Association.
+
+Chaudhuri2010
+[CK10] Siddhartha Chaudhuri and Vladlen Koltun. Data-driven suggestions for creativity support in 3d modeling.
+ACM Transacitons on Graphics, 29(6):Article No. 183, 2010.
+
+Funkhouser2004
+[FKS+04] Thomas Funkhouser, Michael Kazhdan, Philip Shilane, Patrick Min, William Kiefer, Ayellet Tal, Szymon
+Rusinkiewicz, and David Dobkin. Modeling by example. ACM Transactions on Graphics, 23(3):652每663,
+2004.
+
+Chaudhuri2011
+[CKGK11] Siddhartha Chaudhuri, Evangelos Kalogerakis, Leonidas Guibas, and Vladlen Koltun. Probabilistic reasoning
+for assembly-based 3d modeling. ACM Transacitons on Graphics, 30(4):Article No. 35, 2011.
+
+Shamir2008
+[Sha08] Ariel Shamir. A survey on mesh segmentation techniques. Computer Graphics Forum, 27(6):1539每1556, 2008.
+
+Gol2009CG
+[GF09] Aleksey Golovinskiy and Thomas Funkhouser. Consistent segmentation of 3d models. Computers & Graphics,
+33(3):262每269, 2009.
+
+Sidi2011TOG
+[SvKK+11] Oana Sidi, Oliver van Kaick, Yanir Kleiman, Hao Zhang, and Daniel Cohen-Or. Unsupervised co-segmentation
+of a set of shapes via descriptor-space spectral clustering. ACM Transactions on Graphics, 30(6), 2011.
+
+Kalogerakis2010SG
+[KHS10] Evangelos Kalogerakis, Aaron Hertzmann, and Karan Singh. Learning 3d mesh segmentation and labeling.
+ACM Transactions on Graphics, 29(4):102:1每102:12, July 2010.
+
+Fan2012GM
+[FML12] Lubin Fan, Min Meng, and Ligang Liu. Sketch-based mesh cutting: A comparative study. Graphical Models,
+74(6):292 每 301, 2012. Special Issue of selected papers from the 8th Dagstuhl seminar on Geometric Modeling.
+
+Youyi2010CGF
+[ZT10] Youyi Zheng and Chiew-Lan Tai. Mesh decomposition with cross-boundary brushes. Computer Graphics
+Forum, 29(2):527每535, 2010.
+
+Ji2006
+[JLCW06] Zhongping Ji, Ligang Liu, Zhonggui Chen, and Guojin Wang. Easy mesh cutting. Computer Graphics Forum,
+25(3), 2006.
+
+Lubin2011CGF
+[FLL11] Lubin Fan, Ligang Lic, and Kun Liu. Paint mesh cutting. Computer Graphics Forum, 30(2):603每612, 2011.
+
+Funkhouser2003
+[FMK+03] Thomas Funkhouser, Patrick Min, Michael Kazhdan, Joyce Chen, Alex Halderman, David Dobkin, and David
+Jacobs. A search engine for 3d models. ACM Transactions on Graphics, 22(1):83每105, 2003.
+
+Xie2013CGF
+[XXM+13] Xiaohua Xie, Kai Xu, Niloy J. Mitra, Daniel Cohen-Or, Wenyong Gong, Qi Su, and Baoquan Chen. Sketchto-design: Context-based part assembly. Computer Graphics Forum, 32(8):233每245, 2013.
+
+Fan2013CGF
+[FWX+13] Lubin Fan, Ruimin Wang, Linlin Xu, Jiansong Deng, and Ligang Liu. Modeling by drawing with shadow
+guidance. Computer Graphics Forum, 32(7):157每166, 2013.
+
+DeCarlo2003
+[DFRS03] Doug DeCarlo, Adam Finkelstein, Szymon Rusinkiewicz, and Anthony Santella. Suggestive contours for
+conveying shape. ACM Transactions on Graphics, 22(3):848每855, 2003.
+
+GuoSGP2016
+[XJK+16] Xuekun Guo, Juncong Lin, Kai Xu, Siddhartha Chaudhuri, and Xiaogang Jin. CustomCut: On-demand
+Extraction of Customized 3D Parts with 2D Sketches. Submitted to SGP＊2016, 2016.
+
+Shao2011CGF
+[SXY+11] Tianjia Shao, Weiwei Xu, Kangkang Yin, Jingdong Wang, Kun Zhou, and Baining Guo. Discriminative
+sketch-based 3D model retrieval via robust shape matching. Computer Graphics Forum, 30(7):2011每2020,
+2011.
+
+AndrewNealen2007
+[ATOM07] Andrew Nealen, Takeo Igarashi, Olga Sorkine, and Marc Alexa. FiberMesh: designing freeform surfaces with
+3D curves. ACM Transactions on Graphics, 26(3):Article No. 41, 2007.
+
+Boykov2004
+[BK04] Y. Boykov and V. Kolmogorov. An experimental comparison of min-cut/max-flow algorithms for energy
+minimization in vision. IEEE Transactions on Pattern Analysis and Machine Intelligence, 26(9):1124每1137,
+2004.
+
+Aiger2008
+[AMCO08] Dror Aiger, Niloy J. Mitra, and Daniel Cohen-Or. 4-points congruent sets for robust pairwise surface registration. ACM Transactions on Graphics, 27(3):85:1每85:10, August 2008.
+
+Chen2003CGF
+[CTSO03] Ding-Yun Chen, Xiao-Pei Tian, Yu-Te Shen, and Ming Ouhyoung. On visual similarity based 3D model
+retrieval. Computer Graphics Forum, 22(3):223每232, 2003
+
+LinJinWanHui08
+[LJWH08] Juncong Lin, Xiaogang Jin, Charlie C.L. Wang, and Kin-Chuen Hui. Mesh composition on models with
+arbitrary boundary topology. IEEE Transactions On Visualization and Computer Graphics, 14(3):653每665,
+2008.
